@@ -1,0 +1,38 @@
+file upload:
+    https://docs.php.earth/security/uploading/
+
+-when testing try:
+    -adding two fields of same name but different value
+    -try changing every parameter and see what happens
+    -check all api endpoints
+    -use buirp target to see all hystory and routes
+    -try OPTIONS http method
+        OPTIONS /api/Products/ HTTP/1.1
+        => ... Access-Control-Allow-Methods: GET,HEAD,PUT,PATCH,POST,DELETE ...
+    -always try to add Content-Type
+
+ideas:
+    admin panel:
+        -give admin folder some not easy guessable name
+        -hide link from everione exept admin
+        -different js for admin and user
+
+interesting stuff about JWT:
+    https://www.youtube.com/watch?v=aGjLR4uc0ys
+
+Robots.txt file found
+
+WAF
+
+Privacy Policy was not found on the website or is not easily accessible.
+
+Third-party cookies or cookies with tracking information are sent, but no cookie disclaimer was found on the website.
+
+Server software and technology found
+Risk description:
+    An attacker could use this information to mount specific attacks against the identified software type and version.
+Recommendation:
+    We recommend you to eliminate the information which permits the identification of software platform, technology,
+    server and operating system: HTTP server headers, HTML meta information, etc.
+
+
