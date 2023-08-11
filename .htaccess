@@ -63,9 +63,9 @@ RewriteCond %{THE_REQUEST} ^GET.*index [NC]
 RewriteRule (.*?)index\.php/*(.*) /$1$2 [R=301,NE,L]
 
 ## define custom error pages for specific HTTP error codes
-ErrorDocument 400 /bad-request.php
-ErrorDocument 404 /not-found.php
-ErrorDocument 403 /403.php
+ErrorDocument 400 /template/assets/php/error/bad-request.php
+ErrorDocument 404 /template/assets/php/error/not-found.php
+ErrorDocument 403 /template/assets/php/error/403.php
 
 ## set caching headers for specific types of files
 <filesMatch ".(ico|jpg|jpeg|png|gif|woff2|css|js|min.css|min.js|webp|svg)$">
@@ -152,6 +152,16 @@ Header set X-Frame-Options "SAMEORIGIN"
     RewriteRule ^(.+[^/])$ %{REQUEST_URI}/ [R=301,L]
 </IfModule>
 
+## Blocking Access to Sensitive Files
+## Prevent Directory Listing
+Options -Indexes
+
+## Deny Access to Specific Files
+<Files "TODO.txt">
+    Deny from all
+</Files>
+
+
 ## default files to be served when a directory is accessed without specifying a file name
 #DirectoryIndex index.php index.html index.htm
 
@@ -168,36 +178,6 @@ Header set X-Frame-Options "SAMEORIGIN"
 #Deny from 9.10.11.12
 #Deny from 13.14.15.16
 
-### (NEW - TO TEST) ###
-
-
-
-
-## URL Rewriting for SEO
-
-## Preventing Hotlinking
-
-## Blocking Malicious Bots
-
-## Caching Configuration
-
-## Custom Redirects
-
-## Handling Trailing Slashes:
-# While you have a rule to add trailing slashes, consider the reverse situation: removing trailing slashes from URLs. Choose the approach that best suits your SEO and usability goals.
-
-## Blocking Access to Sensitive Files
-
-## Dynamic Error Pages
-
-## Server Signature and Tokens
-# Hide server-related information by turning off server signatures and tokens. This reduces the amount of information available to potential attackers.
-
-## Image Optimization
-# Consider using additional tools or techniques to optimize images for web delivery, such as resizing, compressing, or converting to modern formats.
-
-## HTTPS Referrer Policies:
-# Further enhance security by setting stricter referrer policies, such as no-referrer-when-downgrade or strict-origin-when-cross-origin
 
 
 

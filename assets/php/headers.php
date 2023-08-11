@@ -1,4 +1,8 @@
 <?php
+// Set a custom server signature
+#header("Server: IIS/6.0", true); // this will fool observers
+#header("X-Powered-By: Feces-Throwing-Monkey 3.14", true);
+
 // Cross-Origin Resource Sharing(CORS)
 //Ne diraj ako ne znas sta radis !!!
 /*
