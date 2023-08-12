@@ -5,3 +5,4 @@ include_once("Email.php");
 include_once("UserInput.php");
 include_once("Functions.php");
 include_once("Templates.php");
+include_once("Validator.php");
