@@ -1,15 +1,14 @@
 User-agent: Googlebot
 Disallow:
+
 User-agent: googlebot-image
 Disallow:
+
 User-agent: googlebot-mobile
 Disallow:
+
 User-agent: Slurp
 Disallow:
+
 User-agent: *
-Disallow:
-Disallow: /vendor/
-Disallow: /forms/
-Disallow: /assets/vendor
-Disallow: /assets/php
 Sitemap: https://www.cukaricam.rs/sitemap.xml
