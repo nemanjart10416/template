@@ -1,8 +1,15 @@
 <?php
 
-function contact_template($name, $email, $phone, $message)
-{
-    return '
+class Templates {
+    /**
+     * @param string $name
+     * @param string $email
+     * @param string $phone
+     * @param string $message
+     * @return string
+     */
+    public static function contact_template(string $name, string $email, string $phone, string $message): string {
+        return '
     <!DOCTYPE html>
     <html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="en">
         <head>
@@ -237,6 +244,5 @@ function contact_template($name, $email, $phone, $message)
         </body>
     </html>
 ';
+    }
 }
-
-?>

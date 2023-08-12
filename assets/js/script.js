@@ -1,20 +1,3 @@
-var setError = (errorElementName, error) => {
-    var element = document.getElementById(errorElementName + "Error");
-    element.style.display = "block";
-    element.innerHTML = error;
-    document.getElementById(errorElementName).focus();
-    document.getElementById(errorElementName).scrollIntoView({
-        behavior: 'smooth',
-        block: 'center'
-    });
-}
-
-var removeError = (errorElementName) => {
-    var element = document.getElementById(errorElementName + "Error");
-    element.innerHTML = "";
-    element.style.display = "none";
-}
-
 //navigacija
 var navbarDropdown = document.getElementById("navbarDropdown");
 var dropdownmenu = document.getElementsByClassName("dropdown-menu");
