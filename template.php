@@ -1,8 +1,6 @@
 <?php
 include_once("assets/php/funkcije.php");
 
-Validator::usage_example();
-
 ?>
 <!doctype html>
 <html lang="sr">
