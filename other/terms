@@ -96,8 +96,6 @@ SameSite cookie:
                         - request resulted from a top-level navigation by the user, such as clicking a link
                         - Other requests, such as those initiated by scripts, will not include the cookie
 
-minimum viable product (MVP):
-    -version of a product with just enough features to be usable by early customers who can then provide feedback for future product development
 
 
 
