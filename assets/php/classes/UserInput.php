@@ -6,19 +6,22 @@ class UserInput {
      * @return string
      */
     public static function sanitize(string $data): string {
-        //returns a string with whitespace stripped from the beginning and end of string
+        // Remove whitespace from the beginning and end of the string
         $data = trim($data);
 
-        //Strip HTML and PHP tags from a string. This function tries to return a string with all NULL bytes, HTML, and PHP tags stripped from a given string
+        // Strip HTML and PHP tags from the string
         $data = strip_tags($data);
 
-        //Convert special characters to HTML entities. This is one of the famous methods to prevent XSS
-        $data = htmlspecialchars($data);
+        // Convert special characters to HTML entities to prevent XSS attacks
+        $data = htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
 
-        //NULL byte %00
+        // Remove NULL bytes and other special characters
         $data = str_replace(chr(0), '', $data);
         $data = str_replace("%00", "", $data);
         $data = str_replace("%0", "", $data);
+
+
+
         return str_replace("\0", "", $data);
     }
 }

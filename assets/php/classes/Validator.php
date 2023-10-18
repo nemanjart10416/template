@@ -29,7 +29,7 @@ class Validator {
     /**
      * @return void
      */
-    public static function usage_example() {
+    public static function usageExample() {
         $data = [
             'name_pass' => 'John Doe',
             'name_fail' => '',

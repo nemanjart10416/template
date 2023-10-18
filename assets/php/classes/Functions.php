@@ -2,6 +2,8 @@
 
 class Functions {
     /**
+     * Logs out the current user by destroying the session and clearing session cookies.
+     *
      * @return void
      */
     public static function logout(): void {
@@ -13,8 +15,10 @@ class Functions {
     }
 
     /**
-     * @param string $text
-     * @return string
+     * Encrypts the given text using AES-256-CBC encryption.
+     *
+     * @param string $text The text to be encrypted.
+     * @return string The encrypted text.
      */
     public static function encrypt(string $text): string {
         $secret_key = 'CC6pxqR1nXZ213sk6Y4R';
@@ -24,8 +28,10 @@ class Functions {
     }
 
     /**
-     * @param string $text
-     * @return string
+     * Decrypts the given encrypted text using AES-256-CBC decryption.
+     *
+     * @param string $text The text to be decrypted.
+     * @return string The decrypted text.
      */
     public static function decrypt(string $text): string {
         $secret_key = 'CC6pxqR1nXZ213sk6Y4R';
@@ -35,18 +41,22 @@ class Functions {
     }
 
     /**
-     * @param string $s
-     * @return string
+     * Appends a "Back" link to the given string, allowing users to navigate back using JavaScript.
+     *
+     * @param string $s The string to which the "Back" link is appended.
+     * @return string The input string with the appended "Back" link.
      */
-    public static function nazad(string $s): string {
-        return $s . " <a href='javascript:history.back()'>nazad</a>";
+    public static function back(string $s): string {
+        return $s . " <a href='javascript:history.back()'>back</a>";
     }
 
     /**
-     * @param string $curr
-     * @return string
+     * Checks if the current page matches the provided page name and returns an "active" class if they match.
+     *
+     * @param string $curr The name of the current page being compared.
+     * @return string Returns an empty string if the current page doesn't match $curr; otherwise, returns "active".
      */
-    public static function check_current(string $curr): string {
+    public static function checkCurrent(string $curr): string {
         $page = ucfirst(pathinfo($_SERVER['PHP_SELF'], PATHINFO_FILENAME));
         $page = strtolower($page);
 
@@ -58,16 +68,20 @@ class Functions {
     }
 
     /**
+     * Generates a CSRF token and stores it in the session for form submissions to prevent CSRF attacks.
+     *
      * @return void
      */
-    public static function generate_csrf_token(): void {
+    public static function generateCsrfToken(): void {
         $_SESSION["csrf_token"] = md5(uniqid(mt_rand(), true));
     }
 
     /**
-     * @return string
+     * Retrieves the stored CSRF token from the session for form submission validation.
+     *
+     * @return string The CSRF token.
      */
-    public static function get_csrf_token(): string {
+    public static function getCsrfToken(): string {
         return $_SESSION["csrf_token"];
     }
 }

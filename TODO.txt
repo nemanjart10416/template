@@ -12,7 +12,11 @@
 
 # Hide PHP
 
-
+TODO
+Class Names: Use StudlyCaps for class names. For example: DatabaseConnection.
+Method Names: Use camelCase for method names. For example: getUserName().
+Function Names: Use snake_case for function names. For example: format_date().
+Variable Names: Use snake_case for variable names. For example: $node_title.
 
 
 

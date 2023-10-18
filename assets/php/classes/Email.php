@@ -4,7 +4,7 @@ class Email {
     /**
      * @var string
      */
-    private string $adminEmail = "admin@gmail.com";
+    private string $admin_email = "admin@gmail.com";
     /**
      * @var string
      */
@@ -12,14 +12,16 @@ class Email {
     /**
      * @var string
      */
-    private string $emailFrom = "email@domain.com";
+    private string $email_from = "email@domain.com";
 
     /**
-     * @param string $email
-     * @param string $subject
-     * @param string $name
-     * @param string $message
-     * @return bool
+     * Sends an email.
+     *
+     * @param string $email The recipient's email address.
+     * @param string $subject The email subject.
+     * @param string $name The recipient's name.
+     * @param string $message The email message.
+     * @return bool True if the email was sent successfully, false otherwise.
      */
     public function sendMail(string $email, string $subject, string $name, string $message): bool {
         $from = $this->getEmailFrom();
@@ -39,45 +41,48 @@ class Email {
     /**
      * @return string
      */
-    public function getAdminEmail(): string {
-        return $this->adminEmail;
+    public function getAdminEmail(): string
+    {
+        return $this->admin_email;
     }
 
     /**
-     * @param string $adminEmail
+     * @param string $admin_email
      */
-    public function setAdminEmail(string $adminEmail): void {
-        $this->adminEmail = $adminEmail;
+    public function setAdminEmail(string $admin_email): void
+    {
+        $this->admin_email = $admin_email;
     }
 
     /**
      * @return string
      */
-    public function getDomain(): string {
+    public function getDomain(): string
+    {
         return $this->domain;
     }
 
     /**
      * @param string $domain
      */
-    public function setDomain(string $domain): void {
+    public function setDomain(string $domain): void
+    {
         $this->domain = $domain;
     }
 
     /**
      * @return string
      */
-    public function getEmailFrom(): string {
-        return $this->emailFrom;
+    public function getEmailFrom(): string
+    {
+        return $this->email_from;
     }
 
     /**
-     * @param string $emailFrom
+     * @param string $email_from
      */
-    public function setEmailFrom(string $emailFrom): void {
-        $this->emailFrom = $emailFrom;
+    public function setEmailFrom(string $email_from): void
+    {
+        $this->email_from = $email_from;
     }
-
-
-
 }

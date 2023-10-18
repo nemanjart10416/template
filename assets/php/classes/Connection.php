@@ -19,20 +19,17 @@ class Connection {
     private string $db_database;
 
     /**
-     * @param string $db_servername
-     * @param string $db_username
-     * @param string $db_password
-     * @param string $db_database
+     * Connection constructor.
+     * Sets default values for database connection parameters.
+     * @param void
      */
-    public function __construct() {
-        //local database
+    public function __construct() { //local database
         $this->db_servername = "localhost";
         $this->db_username = "root";
         $this->db_password = "";
         $this->db_database = "airport_taxi";
 
-        if (false) {
-            //server database
+        if (false) { //server database
             $this->db_servername = "localhost";
             $this->db_username = "username";
             $this->db_password = "password";
@@ -41,7 +38,8 @@ class Connection {
     }
 
     /**
-     * @return mysqli
+     * Establishes a MySQLi database connection using the provided credentials.
+     * @return mysqli|null A MySQLi object representing the connection or null on failure.
      */
     public static function connection(): ?mysqli {
         $obj = new Connection();
@@ -60,10 +58,11 @@ class Connection {
     }
 
     /**
-     * @param string $err
+     * Handles error logging and inserts error messages into the 'error_logs' table.
+     * @param string $err The error message to log.
      * @return void
      */
-    public static function error_login(string $err): void {
+    public static function errorLogin(string $err): void {
         //check if error_logs table exist
         $konekcija = Connection::connection();
 
@@ -91,9 +90,10 @@ class Connection {
     }
 
     /**
+     * Performs a database backup and allows the backup file to be downloaded.
      * @return void
      */
-    public static function database_backup(): void {
+    public static function databaseBackup(): void {
         $tables = '*';
 
         try {
@@ -188,10 +188,10 @@ class Connection {
     }
 
     /**
-     * Executes a query and returns the result.
-     *
+     * Executes a raw SQL query and returns the result.
+     * WARNING: Does not use prepared statements; suitable for static queries without user input.
      * @param string $sql The SQL query to execute.
-     * @return mysqli_result|false The result of the query or false on error.
+     * @return mysqli_result|null The result of the query or null on error.
      */
     public static function get(string $sql): ?mysqli_result {
         $conn = Connection::connection();
@@ -201,8 +201,8 @@ class Connection {
     }
 
     /**
-     * Executes a query and returns the result.
-     *
+     * Executes a raw SQL query and returns the result.
+     * WARNING: Does not use prepared statements; suitable for static queries without user input.
      * @param string $sql The SQL query to execute.
      * @return bool|null True on success, false on failure, or null on error.
      */
@@ -215,9 +215,10 @@ class Connection {
     }
 
     /**
-     * @return PDO
+     * Establishes a PDO database connection with UTF-8 character set.
+     * @return PDO|null A PDO object representing the connection or null on failure.
      */
-    public static function connection_prepared(): ?PDO {
+    public static function connectionPrepared(): ?PDO {
         $obj = new Connection();
 
         $dbh = new PDO('mysql:host=' . $obj->db_servername . ';dbname=' . $obj->db_database . ";charset=utf8mb4", $obj->db_username, $obj->db_password);
@@ -228,6 +229,73 @@ class Connection {
         $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         return $dbh;
+    }
+
+    /**
+     * Executes a prepared SQL query and returns the result.
+     * Uses prepared statements; suitable for dynamic queries with user input.
+     * @param string $sql The SQL query to execute.
+     * @param array $params An associative array of parameter values for prepared statement.
+     * @return mysqli_result|null The result of the query or null on error.
+     */
+    public static function getP(string $sql, array $params = []): ?mysqli_result {
+        $conn = Connection::connection();
+        $stmt = $conn->prepare($sql);
+
+        if ($stmt) {
+            if (!empty($params)) {
+                // Bind parameters to the prepared statement
+                $types = str_repeat('s', count($params)); // Assuming all parameters are strings
+                $stmt->bind_param($types, ...$params);
+            }
+
+            // Execute the prepared statement
+            $stmt->execute();
+
+            // Get the result set
+            $result = $stmt->get_result();
+
+            // Close the statement and connection
+            $stmt->close();
+            $conn->close();
+
+            return $result;
+        } else {
+            // Handle error (return an error message, log, etc.)
+            return null;
+        }
+    }
+
+    /**
+     * Executes a prepared SQL query and returns the result.
+     * Uses prepared statements; suitable for dynamic queries with user input.
+     * @param string $sql The SQL query to execute.
+     * @param array $params An associative array of parameter values for prepared statement.
+     * @return bool|null True on success, false on failure, or null on error.
+     */
+    public static function setP(string $sql, array $params = []): ?bool {
+        $conn = Connection::connection();
+        $stmt = $conn->prepare($sql);
+
+        if ($stmt) {
+            if (!empty($params)) {
+                // Bind parameters to the prepared statement
+                $types = str_repeat('s', count($params)); // Assuming all parameters are strings
+                $stmt->bind_param($types, ...$params);
+            }
+
+            // Execute the prepared statement
+            $success = $stmt->execute();
+
+            // Close the statement and connection
+            $stmt->close();
+            $conn->close();
+
+            return $success;
+        } else {
+            // Handle error (return an error message, log, etc.)
+            return null;
+        }
     }
 
     /**
@@ -285,6 +353,4 @@ class Connection {
     public function setDbDatabase(string $db_database): void {
         $this->db_database = $db_database;
     }
-
-
 }
