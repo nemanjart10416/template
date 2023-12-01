@@ -27,95 +27,6 @@ class Validator {
     }
 
     /**
-     * @return void
-     */
-    public static function usageExample() {
-        $data = [
-            'name_pass' => 'John Doe',
-            'name_fail' => '',
-            'aa' => 'aaaaaa',
-            'email_pass' => 'valid@example.com',
-            'email_fail' => 'invalidemail',
-            'age_pass' => '30',
-            'age_fail' => 'thirty',
-            'website_pass' => 'https://example.com',
-            'website_fail' => 'invalidwebsite',
-            'date_pass' => '2023-08-12',
-            'date_fail' => 'notadate',
-            'alphaField_pass' => 'abcd',
-            'alphaField_fail' => '1234',
-            'alphaNumericField_pass' => '123abc',
-            'alphaNumericField_fail' => 'abc123@',
-            'regexField_pass' => 'ABC123',
-            'regexField_fail' => 'invalid',
-            'uniqueField_pass' => 'unique@example.com',
-            'uniqueField_fail' => 'duplicate@example.com',
-            'inField_pass' => 'option1',
-            'inField_fail' => 'option4',
-            'notInField_pass' => 'option3',
-            'notInField_fail' => 'option1',
-            'password_pass' => 'password123',
-            'password_fail' => 'short',
-            'password_confirmation_pass' => 'password123',
-            'password_confirmation_fail' => 'mismatch',
-            'customDate_pass' => '2023-08-12',
-            'customDate_fail' => 'invaliddate',
-            'wrong_int1' => '1.1',
-            'wrong_int2' => 1.1,
-            'wrong_int3' => true,
-        ];
-
-        $rules = [
-            'wrong_int1' => 'integer',
-            'wrong_int2' => 'integer',
-            'wrong_int3' => 'integer',
-            'name_pass' => 'required|min:3|max:50',
-            'name_fail' => 'required|min:3|max:50',
-            'email_pass' => 'required|email',
-            'email_fail' => 'required|email',
-            'aa' => 'max|3',
-            'age_pass' => 'numeric',
-            'age_fail' => 'numeric',
-            'website_pass' => 'url',
-            'website_fail' => 'url',
-            'date_pass' => 'date',
-            'date_fail' => 'date',
-            'alphaField_pass' => 'alpha',
-            'alphaField_fail' => 'alpha',
-            'alphaNumericField_pass' => 'alpha_numeric',
-            'alphaNumericField_fail' => 'alpha_numeric',
-            'regexField_pass' => 'regex:/^[A-Z0-9]+$/',
-            'regexField_fail' => 'regex:/^[A-Z0-9]+$/',
-            'uniqueField_pass' => 'unique:users,email',
-            'uniqueField_fail' => 'unique:users,email',
-            'inField_pass' => 'in:option1,option2,option3',
-            'inField_fail' => 'in:option1,option2,option3',
-            'notInField_pass' => 'not_in:option1,option2',
-            'notInField_fail' => 'not_in:option1,option2',
-            'password_pass' => 'required|confirmed|min:8',
-            'password_fail' => 'required|confirmed|min:8',
-            'password_confirmation_pass' => 'confirmed',
-            'password_confirmation_fail' => 'confirmed',
-            'customDate_pass' => 'date_format:Y-m-d',
-            'customDate_fail' => 'date_format:Y-m-d',
-        ];
-
-        $validator = new Validator($data, $rules);
-
-        if ($validator->validate()) {
-            echo "Validation successful.";
-        } else {
-            $errors = $validator->getErrors();
-
-            foreach ($errors as $field => $fieldErrors) {
-                foreach ($fieldErrors as $error) {
-                    echo Message::danger("Error in $field: $error");
-                }
-            }
-        }
-    }
-
-    /**
      * @return bool
      */
     public function validate(): bool {
@@ -257,13 +168,24 @@ class Validator {
                     }
                 }
             }
-        }elseif ($ruleName === 'pib_format') {
+        }elseif ($ruleName === 'pib_format' || $ruleName === 'id_card_num') {
             /* PIB Format: Validates that a PIB (Personal Identification Number) consists of only numbers and is 9 digits long. */
+            /* ID card number: Validates that a card number consists of only numbers and is 9 digits long. */
             if (isset($this->data[$field])) {
                 $pib = $this->data[$field];
 
                 if (!ctype_digit($pib) || strlen($pib) !== 9) {
-                    $this->addError($field, 'PIB must consist of 9 digits.');
+                    $this->addError($field, 'Field must consist of 9 digits.');
+                }
+            }
+        }elseif ($ruleName === 'jmbg_format') {
+            /* PIB Format: Validates that a PIB (Personal Identification Number) consists of only numbers and is 9 digits long. */
+            /* ID card number: Validates that a card number consists of only numbers and is 9 digits long. */
+            if (isset($this->data[$field])) {
+                $pib = $this->data[$field];
+
+                if (!ctype_digit($pib) || strlen($pib) !== 13) {
+                    $this->addError($field, 'Field must consist of 13 digits.');
                 }
             }
         } elseif ($ruleName === 'mb_format') {
@@ -272,7 +194,7 @@ class Validator {
                 $mb = $this->data[$field];
 
                 if (!ctype_digit($mb) || strlen($mb) !== 8) {
-                    $this->addError($field, 'Company registration number (MB) must consist of 8 digits.');
+                    $this->addError($field, 'Field must consist of 8 digits.');
                 }
             }
         }
