@@ -1,5 +1,8 @@
 <?php
 
+/**
+ *
+ */
 class Message {
     /**
      * Generate a success alert message.

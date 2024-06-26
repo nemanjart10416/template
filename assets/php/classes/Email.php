@@ -1,5 +1,8 @@
 <?php
 
+/**
+ *
+ */
 class Email {
     /**
      * @var string

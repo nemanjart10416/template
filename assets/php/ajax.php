@@ -1,3 +1,3 @@
 <?php
-include("funkcije.php");
+include("functions.php");
 

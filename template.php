@@ -1,5 +1,6 @@
 <?php
-include_once("assets/php/funkcije.php");
+$ans = "";
+include_once("assets/php/functions.php");
 
 ?>
 <!doctype html>
@@ -34,7 +35,13 @@ include_once("assets/php/funkcije.php");
         <div class="container-fluid">
 
             <div class="row">
-                <?php include_once("assets/components/navigacija.php"); ?>
+                <?php include_once("assets/components/navbar.php"); ?>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <?php echo $ans; ?>
+                </div>
             </div>
 
             <div class="row mt-1">

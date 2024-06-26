@@ -1,5 +1,8 @@
 <?php
 
+/**
+ *
+ */
 class Templates {
     /**
      * @param string $name

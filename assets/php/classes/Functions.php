@@ -1,5 +1,8 @@
 <?php
 
+/**
+ *
+ */
 class Functions {
     /**
      * Logs out the current user by destroying the session and clearing session cookies.
