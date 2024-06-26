@@ -1,4 +1,13 @@
 /*
+ * Components
+ */
+.marked-text {
+  color: green;
+}
+.marked-text-2 {
+  color: red;
+}
+/*
  * Scroll bar
  */
 /* Track */
