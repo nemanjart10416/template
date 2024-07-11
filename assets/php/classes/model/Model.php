@@ -5,6 +5,63 @@
  */
 abstract class Model
 {
+    /**
+     * @var int|null
+     */
+    private ?int $id;
+
+    /**
+     * @var string
+     */
+    private string $uuid;
+
+    /**
+     * Constructor to initialize the UUID and ID.
+     *
+     * @param int|null $id
+     * @param string|null $uuid
+     * @throws \Random\RandomException
+     */
+    public function __construct(?int $id = null, ?string $uuid = null)
+    {
+        if ($id === null && $uuid === null) {
+            $this->uuid = $this->generateUuid();
+        } else {
+            $this->id = $id;
+            $this->uuid = $uuid;
+        }
+    }
+
+
+    /**
+     * Generate a UUID for the entity if it's not already set.
+     *
+     * @return string
+     * @throws \Random\RandomException If UUID generation fails.
+     */
+    public function generateUuid(): string {
+        try {
+            // Generate a random string
+            $randomString = bin2hex(random_bytes(16));
+
+            // Get the current time in microseconds
+            $time = microtime(true);
+
+            // Concatenate time and random string
+            $rawUuid = $time . $randomString;
+
+            // Hash the raw UUID to ensure uniqueness and to shorten it
+            $hashedUuid = hash('sha256', $rawUuid);
+
+            // Optionally, encode the hash to make it URL-safe and trim it to a reasonable length
+            $uuid = substr(base64_encode(hex2bin($hashedUuid)), 0, 22);
+
+            // Remove URL-unsafe characters
+            return $uuid = str_replace(['+', '/', '='], '', $uuid);
+        } catch (\Exception $e) {
+            throw new \Random\RandomException("Failed to generate UUID: " . $e->getMessage());
+        }
+    }
 
     /**
      * Method returns entity by its id.
@@ -51,4 +108,39 @@ abstract class Model
      * @return bool True if the entity was successfully updated, false otherwise.
      */
     abstract public function update(): bool;
+
+    /**
+     * @return int|null
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int|null $id
+     * @return void
+     */
+    public function setId(?int $id): void
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUuid(): string {
+        return $this->uuid;
+    }
+
+    /**
+     * @param string $uuid
+     * @return void
+     */
+    public function setUuid(string $uuid): void
+    {
+        $this->uuid = $uuid;
+    }
+
+
 }

@@ -30,7 +30,7 @@ class Connection {
         $this->db_servername = "localhost";
         $this->db_username = "root";
         $this->db_password = "";
-        $this->db_database = "airport_taxi";
+        $this->db_database = "db";
 
         if (false) { //server database
             $this->db_servername = "localhost";
