@@ -16,19 +16,25 @@ abstract class Model
     private string $uuid;
 
     /**
+     * @var DateTimeImmutable|null
+     */
+    private ?DateTimeImmutable $createdAt;
+
+    /**
      * Constructor to initialize the UUID and ID.
      *
      * @param int|null $id
      * @param string|null $uuid
      * @throws \Random\RandomException
      */
-    public function __construct(?int $id = null, ?string $uuid = null)
+    public function __construct(?int $id = null, ?string $uuid = null, ?DateTimeImmutable $createdAt = null)
     {
         if ($id === null && $uuid === null) {
             $this->uuid = $this->generateUuid();
         } else {
             $this->id = $id;
             $this->uuid = $uuid;
+            $this->createdAt = $createdAt;
         }
     }
 
@@ -140,6 +146,31 @@ abstract class Model
     public function setUuid(string $uuid): void
     {
         $this->uuid = $uuid;
+    }
+
+    /**
+     * @return DateTimeImmutable|null
+     */
+    public function getCreatedAt(): ?DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCreatedAtString(): ?string
+    {
+        return $this->createdAt->format('Y-m-d H:i:s');
+    }
+
+    /**
+     * @param DateTimeImmutable|null $createdAt
+     * @return void
+     */
+    public function setCreatedAt(?DateTimeImmutable $createdAt): void
+    {
+        $this->createdAt = $createdAt;
     }
 
 
