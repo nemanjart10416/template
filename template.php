@@ -1,5 +1,5 @@
 <?php
-$ans = "";
+$answer = "";
 include_once("assets/php/functions.php");
 
 ?>
@@ -40,7 +40,7 @@ include_once("assets/php/functions.php");
 
             <div class="row">
                 <div class="col-12">
-                    <?php echo $ans; ?>
+                    <?php echo $answer; ?>
                 </div>
             </div>
 

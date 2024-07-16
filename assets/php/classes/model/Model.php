@@ -16,9 +16,9 @@ abstract class Model
     private string $uuid;
 
     /**
-     * @var DateTimeImmutable|null
+     * @var string|null
      */
-    private ?DateTimeImmutable $createdAt;
+    private ?string $createdAt;
 
     /**
      * Constructor to initialize the UUID and ID.
@@ -27,7 +27,7 @@ abstract class Model
      * @param string|null $uuid
      * @throws \Random\RandomException
      */
-    public function __construct(?int $id = null, ?string $uuid = null, ?DateTimeImmutable $createdAt = null)
+    public function __construct(?int $id = null, ?string $uuid = null, ?string $createdAt = null)
     {
         if ($id === null && $uuid === null) {
             $this->uuid = $this->generateUuid();
@@ -75,7 +75,7 @@ abstract class Model
      * @param int $id
      * @return object|null The entity object or null if not found.
      */
-    abstract public function getById(int $id): ?object;
+    abstract public static function getById(int $id): ?object;
 
     /**
      * This method should take an associative array and return an object of its class.
@@ -149,26 +149,18 @@ abstract class Model
     }
 
     /**
-     * @return DateTimeImmutable|null
+     * @return string|null
      */
-    public function getCreatedAt(): ?DateTimeImmutable
+    public function getCreatedAt(): ?string
     {
         return $this->createdAt;
     }
 
     /**
-     * @return string|null
-     */
-    public function getCreatedAtString(): ?string
-    {
-        return $this->createdAt->format('Y-m-d H:i:s');
-    }
-
-    /**
-     * @param DateTimeImmutable|null $createdAt
+     * @param string|null $createdAt
      * @return void
      */
-    public function setCreatedAt(?DateTimeImmutable $createdAt): void
+    public function setCreatedAt(?string $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
