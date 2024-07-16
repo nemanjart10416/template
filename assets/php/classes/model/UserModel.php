@@ -1,5 +1,8 @@
 <?php
 
+/**
+ *
+ */
 abstract class UserModel extends Model
 {
     /**
@@ -31,16 +34,70 @@ abstract class UserModel extends Model
         $this->password = $password;
     }
 
-    abstract public static function getById(int $id): ?object;
+    /**
+     * @param int $id
+     * @return object|User|null
+     */
+    public static function getById(int $id): ?object
+    {
+        $sql = "SELECT * FROM users_u where u_id = ?";
+        $params = [$id];
+        $result = Connection::getP($sql, $params);
 
-    abstract public static function assocToObject(array $data): ?object;
+        if ($result && $result->num_rows > 0) {
+            $userData = $result->fetch_assoc();
+            return self::assocToObject($userData);
+        }
 
-    abstract public static function getAll(): array;
+        return null;
+    }
 
-    abstract public function delete(): bool;
+    /**
+     * This method needs to be overridden in subclasses to convert
+     * associative array $data into an object of the appropriate type.
+     *
+     * @param array $data
+     * @return object|null
+     */
+    public static function assocToObject(array $data): ?object {
+        return null; // Default implementation, to be overridden in subclasses
+    }
 
+    /**
+     * @return array|object[]
+     */
+    public static function getAll(): array
+    {
+        $usersData = Connection::get("SELECT * FROM users_u");
+
+        $users = [];
+
+        while ($userData = $usersData->fetch_assoc()){
+            $users []= self::assocToObject($userData);
+        }
+
+        return $users;
+    }
+
+    /**
+     * @return bool
+     */
+    public function delete(): bool
+    {
+        $sql = "DELETE FROM users_u where u_id = ?";
+        $params = [$this->getId()];
+
+        return Connection::setP($sql, $params);
+    }
+
+    /**
+     * @return bool
+     */
     abstract public function create(): bool;
 
+    /**
+     * @return bool
+     */
     abstract public function update(): bool;
 
     /**
@@ -117,31 +174,52 @@ abstract class UserModel extends Model
         return false;
     }
 
+    /**
+     * @return string
+     */
     public function getUsername(): string
     {
         return $this->username;
     }
 
+    /**
+     * @param string $username
+     * @return void
+     */
     public function setUsername(string $username): void
     {
         $this->username = $username;
     }
 
+    /**
+     * @return string
+     */
     public function getEmail(): string
     {
         return $this->email;
     }
 
+    /**
+     * @param string $email
+     * @return void
+     */
     public function setEmail(string $email): void
     {
         $this->email = $email;
     }
 
+    /**
+     * @return string
+     */
     public function getPassword(): string
     {
         return $this->password;
     }
 
+    /**
+     * @param string $password
+     * @return void
+     */
     public function setPassword(string $password): void
     {
         $this->password = $password;
