@@ -46,7 +46,7 @@ abstract class UserModel extends Model
 
         if ($result && $result->num_rows > 0) {
             $userData = $result->fetch_assoc();
-            return self::assocToObject($userData);
+            return User::assocToObject($userData);
         }
 
         return null;
@@ -59,9 +59,7 @@ abstract class UserModel extends Model
      * @param array $data
      * @return object|null
      */
-    public static function assocToObject(array $data): ?object {
-        return null; // Default implementation, to be overridden in subclasses
-    }
+    abstract public static function assocToObject(array $data): ?object;
 
     /**
      * @return array|object[]
@@ -73,7 +71,7 @@ abstract class UserModel extends Model
         $users = [];
 
         while ($userData = $usersData->fetch_assoc()){
-            $users []= self::assocToObject($userData);
+            $users []= User::assocToObject($userData);
         }
 
         return $users;

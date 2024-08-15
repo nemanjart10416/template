@@ -8,10 +8,12 @@ USE db_name;
 -- Create the 'users_u' table
 CREATE TABLE users_u
 (
-    u_id         INT PRIMARY KEY AUTO_INCREMENT,
-    u_uuid       VARCHAR(255) NOT NULL UNIQUE,
-    u_email      VARCHAR(255) NOT NULL UNIQUE,
-    u_username   VARCHAR(255) NOT NULL UNIQUE,
-    u_password   VARCHAR(255) NOT NULL,
-    u_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    u_id          INT PRIMARY KEY AUTO_INCREMENT,
+    u_uuid        VARCHAR(255) NOT NULL UNIQUE,
+    u_email       VARCHAR(255) NOT NULL UNIQUE,
+    u_username    VARCHAR(255) NOT NULL UNIQUE,
+    u_password    VARCHAR(255) NOT NULL,
+    u_last_login  datetime              DEFAULT NULL,
+    u_modified_at datetime     NOT NULL DEFAULT current_timestamp(),
+    u_created_at  datetime     NOT NULL DEFAULT current_timestamp()
 );
