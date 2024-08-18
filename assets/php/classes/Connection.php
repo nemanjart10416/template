@@ -3,7 +3,8 @@
 /**
  *
  */
-class Connection {
+class Connection
+{
     /**
      * @var string
      */
@@ -26,11 +27,12 @@ class Connection {
      * Sets default values for database connection parameters.
      * @param void
      */
-    public function __construct() { //local database
+    public function __construct()
+    { //local database
         $this->db_servername = "localhost";
         $this->db_username = "root";
         $this->db_password = "";
-        $this->db_database = "db";
+        $this->db_database = "online_shop";
 
         if (false) { //server database
             $this->db_servername = "localhost";
@@ -44,7 +46,8 @@ class Connection {
      * Establishes a MySQLi database connection using the provided credentials.
      * @return mysqli|null A MySQLi object representing the connection or null on failure.
      */
-    public static function connection(): ?mysqli {
+    public static function connection(): ?mysqli
+    {
         $obj = new Connection();
 
         // Create connection
@@ -61,42 +64,49 @@ class Connection {
     }
 
     /**
-     * Handles error logging and inserts error messages into the 'error_logs' table.
+     * Handles error logging and inserts error messages into the 'Connection::errorLogins' table.
      * @param string $err The error message to log.
      * @return void
      */
-    public static function errorLogin(string $err): void {
-        //check if error_logs table exist
-        $konekcija = Connection::connection();
+    public static function errorLogin(string $err): void
+    {
+        // Check if the errorLogins table exists
+        $connection = Connection::connection();
 
-        $val = $konekcija->query("SELECT * FROM error_logs");
+        $val = $connection->query("SHOW TABLES LIKE 'errorLogins'");
 
-        if ($val === false) {
-            Connection::set("
-            CREATE TABLE error_logs(
-                error_logs_id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                error_logs_date TIMESTAMP NOT NULL,
-                error_logs_message VARCHAR(600) NOT NULL
+        if ($val === false || $val->num_rows == 0) {
+            // Create the errorLogins table if it doesn't exist
+            $createTableQuery = "
+            CREATE TABLE errorLogins (
+                errorLogins_id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                errorLogins_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                errorLogins_message VARCHAR(600) NOT NULL
             )
-        ");
+        ";
+            Connection::set($createTableQuery);
         }
 
         try {
-            $konekcija_prepared = konekcija_prepared();
-            $query = "INSERT INTO error_logs (error_logs_id,error_logs_date,error_logs_message) VALUES (NULL,:err_date,:message)";
-            $sth = $konekcija_prepared->prepare($query);
-            $date = date("Y/m/d h:i:sa");
+            // Prepare and execute the insert query
+            $connection_prepared = Connection::connectionPrepared();
+            $query = "INSERT INTO errorLogins (errorLogins_date, errorLogins_message) VALUES (:err_date, :message)";
+            $sth = $connection_prepared->prepare($query);
+            $date = date("Y-m-d H:i:s");
             $sth->bindParam(':err_date', $date);
             $sth->bindParam(':message', $err);
             $sth->execute();
-        } catch (PDOException $e) {}
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
     }
 
     /**
      * Performs a database backup and allows the backup file to be downloaded.
      * @return void
      */
-    public static function databaseBackup(): void {
+    public static function databaseBackup(): void
+    {
         $tables = '*';
 
         try {
@@ -187,7 +197,8 @@ class Connection {
                 unlink($fileName);
                 exit;
             }
-        } catch (Exception $e) {}
+        } catch (Exception $e) {
+        }
     }
 
     /**
@@ -196,7 +207,8 @@ class Connection {
      * @param string $sql The SQL query to execute.
      * @return mysqli_result|null The result of the query or null on error.
      */
-    public static function get(string $sql): ?mysqli_result {
+    public static function get(string $sql): ?mysqli_result
+    {
         $conn = Connection::connection();
         $result = $conn->query($sql);
         $conn->close();
@@ -209,7 +221,8 @@ class Connection {
      * @param string $sql The SQL query to execute.
      * @return bool|null True on success, false on failure, or null on error.
      */
-    public static function set(string $sql): ?bool {
+    public static function set(string $sql): ?bool
+    {
         $conn = Connection::connection();
         $ans = $conn->query($sql);
         $conn->close();
@@ -221,7 +234,8 @@ class Connection {
      * Establishes a PDO database connection with UTF-8 character set.
      * @return PDO|null A PDO object representing the connection or null on failure.
      */
-    public static function connectionPrepared(): ?PDO {
+    public static function connectionPrepared(): ?PDO
+    {
         $obj = new Connection();
 
         $dbh = new PDO('mysql:host=' . $obj->db_servername . ';dbname=' . $obj->db_database . ";charset=utf8mb4", $obj->db_username, $obj->db_password);
@@ -241,7 +255,8 @@ class Connection {
      * @param array $params An associative array of parameter values for prepared statement.
      * @return mysqli_result|null The result of the query or null on error.
      */
-    public static function getP(string $sql, array $params = []): ?mysqli_result {
+    public static function getP(string $sql, array $params = []): ?mysqli_result
+    {
         $conn = Connection::connection();
         $stmt = $conn->prepare($sql);
 
@@ -276,7 +291,8 @@ class Connection {
      * @param array $params An associative array of parameter values for prepared statement.
      * @return bool|null True on success, false on failure, or null on error.
      */
-    public static function setP(string $sql, array $params = []): ?bool {
+    public static function setP(string $sql, array $params = []): ?bool
+    {
         $conn = Connection::connection();
         $stmt = $conn->prepare($sql);
 
@@ -290,12 +306,26 @@ class Connection {
             // Execute the prepared statement
             $success = $stmt->execute();
 
+            if (!$success) {
+                // Print error if execution fails
+                Connection::errorLogin("Statement execution error: " . $stmt->error);
+                echo "Statement execution error: " . $stmt->error;
+            }
+
             // Close the statement and connection
             $stmt->close();
             $conn->close();
 
             return $success;
         } else {
+            // Print the error before returning null
+            if ($conn->error) {
+                Connection::errorLogin("Connection error: " . $conn->error);
+            }
+            if ($stmt->error) {
+                Connection::errorLogin("Statement error: " . $stmt->error);
+            }
+
             // Handle error (return an error message, log, etc.)
             return null;
         }
@@ -304,56 +334,64 @@ class Connection {
     /**
      * @return string
      */
-    public function getDbServername(): string {
+    public function getDbServername(): string
+    {
         return $this->db_servername;
     }
 
     /**
      * @param string $db_servername
      */
-    public function setDbServername(string $db_servername): void {
+    public function setDbServername(string $db_servername): void
+    {
         $this->db_servername = $db_servername;
     }
 
     /**
      * @return string
      */
-    public function getDbUsername(): string {
+    public function getDbUsername(): string
+    {
         return $this->db_username;
     }
 
     /**
      * @param string $db_username
      */
-    public function setDbUsername(string $db_username): void {
+    public function setDbUsername(string $db_username): void
+    {
         $this->db_username = $db_username;
     }
 
     /**
      * @return string
      */
-    public function getDbPassword(): string {
+    public function getDbPassword(): string
+    {
         return $this->db_password;
     }
 
     /**
      * @param string $db_password
      */
-    public function setDbPassword(string $db_password): void {
+    public function setDbPassword(string $db_password): void
+    {
         $this->db_password = $db_password;
     }
 
     /**
      * @return string
      */
-    public function getDbDatabase(): string {
+    public function getDbDatabase(): string
+    {
         return $this->db_database;
     }
 
     /**
      * @param string $db_database
      */
-    public function setDbDatabase(string $db_database): void {
+    public function setDbDatabase(string $db_database): void
+    {
         $this->db_database = $db_database;
     }
 }

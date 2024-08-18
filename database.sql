@@ -17,3 +17,11 @@ CREATE TABLE users_u
     u_modified_at datetime     NOT NULL DEFAULT current_timestamp(),
     u_created_at  datetime     NOT NULL DEFAULT current_timestamp()
 );
+
+CREATE TABLE rate_limits_rl
+(
+    rl_ip           VARCHAR(45) NOT NULL,
+    rl_attempts     INT         NOT NULL DEFAULT 0,
+    rl_last_attempt TIMESTAMP            DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (rl_ip)
+);

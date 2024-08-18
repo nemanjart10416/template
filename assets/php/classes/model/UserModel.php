@@ -59,7 +59,9 @@ abstract class UserModel extends Model
      * @param array $data
      * @return object|null
      */
-    abstract public static function assocToObject(array $data): ?object;
+    public static function assocToObject(array $data): ?object {
+        return null; // Default implementation, to be overridden in subclasses
+    }
 
     /**
      * @return array|object[]
@@ -71,10 +73,46 @@ abstract class UserModel extends Model
         $users = [];
 
         while ($userData = $usersData->fetch_assoc()){
-            $users []= User::assocToObject($userData);
+            $users []= self::assocToObject($userData);
         }
 
         return $users;
+    }
+
+    /**
+     * Checks if given email is unique
+     *
+     * @param string $email email to check
+     * @return bool True if email not taken
+     */
+    public static function emailUnique(string $email): bool {
+        $sql = "SELECT COUNT(*) AS count FROM user_u WHERE u_email = ?";
+        $params = [$email];
+        $result = Connection::getP($sql, $params);
+
+        if ($result && $row = $result->fetch_assoc()) {
+            return !(intval($row['count']) > 0);
+        }
+
+        return true;
+    }
+
+    /**
+     * Checks if given email is unique
+     *
+     * @param string $email email to check
+     * @return bool True if email not taken
+     */
+    public static function usernameUnique(string $email): bool {
+        $sql = "SELECT COUNT(*) AS count FROM user_u WHERE u_username = ?";
+        $params = [$email];
+        $result = Connection::getP($sql, $params);
+
+        if ($result && $row = $result->fetch_assoc()) {
+            return !(intval($row['count']) > 0);
+        }
+
+        return true;
     }
 
     /**

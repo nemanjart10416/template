@@ -5,6 +5,43 @@
  */
 class Functions {
     /**
+     * Checks if an IP address has exceeded the allowed number of attempts within a given time frame.
+     *
+     * @param string $ip The IP address to check for rate limiting.
+     * @param int $limit The maximum number of allowed attempts within the time frame. Default is 5.
+     * @param int $timeFrame The time frame in minutes to monitor the attempts. Default is 10 minutes.
+     *
+     * @return bool Returns true if the IP has not exceeded the limit; otherwise, returns false.
+     */
+    public static function checkRateLimit(string $ip, int $limit = 5, int $timeFrame = 10): bool
+    {
+        $result = Connection::getP("SELECT rl_attempts, rl_last_attempt FROM rate_limits_rl WHERE rl_ip = ?", [$ip]);
+
+        if ($result->num_rows > 0) {
+            $result = $result->fetch_assoc();
+            // Calculate the time elapsed since the last attempt
+            $timeElapsed = time() - strtotime($result['rl_last_attempt']);
+
+            // If the time elapsed is greater than the specified time frame, reset the attempt counter
+            if ($timeElapsed > $timeFrame * 60) {
+                // Update the record to reset attempts and set the last attempt time to now
+                Connection::setP("UPDATE rate_limits SET attempts = 1, last_attempt = NOW() WHERE ip = ?", [$ip]);
+            } else {
+                // If the number of attempts exceeds the limit, return false to block further actions
+                if ($result['rl_attempts'] >= $limit) {
+                    return false;
+                }
+                Connection::setP("UPDATE rate_limits_rl SET rl_attempts = rl_attempts + 1 WHERE rl_ip = ?", [$ip]);
+            }
+        } else {
+            Connection::setP("INSERT INTO rate_limits_rl (rl_ip, rl_attempts, rl_last_attempt) VALUES (?, 1, NOW())", [$ip]);
+        }
+
+        // If the IP has not exceeded the limit, return true to allow the action
+        return true;
+    }
+
+    /**
      * Logs out the current user by destroying the session and clearing session cookies.
      *
      * @return void
