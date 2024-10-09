@@ -60,7 +60,7 @@ include_once("assets/php/functions.php");
 
         </div>
 
-
+        <script src="assets/js/bootstrap.bundle.min.js" defer></script>
         <script src="assets/js/script.js" defer></script>
     </body>
 </html>
