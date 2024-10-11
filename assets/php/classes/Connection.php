@@ -32,7 +32,7 @@ class Connection
         $this->db_servername = "localhost";
         $this->db_username = "root";
         $this->db_password = "";
-        $this->db_database = "online_shop";
+        $this->db_database = "jobs";
 
         if (false) { //server database
             $this->db_servername = "localhost";

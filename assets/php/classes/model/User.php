@@ -67,4 +67,19 @@ class User extends UserModel
         // Authentication failed, return false
         return false;
     }
+
+    protected static function getTableName(): string
+    {
+        return "users_u";
+    }
+
+    protected static function getTablePrefix(): string
+    {
+        return "u";
+    }
+
+    protected static function getPrimaryKey(): string
+    {
+        return "u_id";
+    }
 }
