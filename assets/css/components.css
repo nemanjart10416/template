@@ -8,27 +8,57 @@
  * spacing
  */
 /*
+ * texts
+ */
+/*
  * buttons
  */
 /*
  * titles
  */
+.into-title {
+  font-size: 18px;
+  font-family: "emoji";
+}
+.title {
+  font-size: 27px;
+  font-family: "emoji";
+}
+.sub-title {
+  font-size: 18px;
+  font-family: "emoji";
+}
+p {
+  font-size: 18px;
+  font-family: "emoji";
+  margin-bottom: 0;
+}
 /*
  * Scroll bar
  */
-/* Track */
-::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px grey;
-  border-radius: 10px;
+/* Total width */
+::-webkit-scrollbar {
+  width: 8px;
+  /* Adjust width */
 }
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: green;
+/* Scrollbar track */
+::-webkit-scrollbar-track {
+  background: gray;
+  /* Background color */
   border-radius: 10px;
+  /* Rounded corners */
+}
+/* Scrollbar handle */
+::-webkit-scrollbar-thumb {
+  background: red;
+  /* Handle color */
+  border-radius: 10px;
+  /* Rounded corners */
 }
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: red;
+  background: #555;
+  /* Darker color on hover */
 }
 /*
  * Back to top btn

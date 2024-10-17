@@ -3,37 +3,61 @@
 /*
  * buttons
  */
-.primary-btn {}
+.primary-btn {
 
-.secondary-btn {}
+}
+
+.secondary-btn {
+
+}
 
 /*
  * titles
  */
-.into-title {}
+.into-title {
+    font-size: @subtitleSize;
+    font-family: @subtitleFont;
+}
 
-.title {}
+.title {
+    font-size: @titleSize;
+    font-family: @titleFont;
+}
 
-.sub-title {}
+.sub-title {
+    font-size: @subtitleSize;
+    font-family: @subtitleFont;
+}
+
+p {
+    font-size: @textSize;
+    font-family: @textFont;
+    margin-bottom: 0;
+}
 
 /*
  * Scroll bar
  */
-/* Track */
-::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 5px grey;
-    border-radius: 10px;
+/* Total width */
+::-webkit-scrollbar {
+    width: 8px; /* Adjust width */
 }
 
-/* Handle */
+/* Scrollbar track */
+::-webkit-scrollbar-track {
+    background: gray; /* Background color */
+    border-radius: 10px; /* Rounded corners */
+}
+
+/* Scrollbar handle */
 ::-webkit-scrollbar-thumb {
-    background: @color1;
-    border-radius: 10px;
+    background: @color2; /* Handle color */
+    border-radius: 10px; /* Rounded corners */
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-    background: @color2;
+    background: #555; /* Darker color on hover */
 }
 
 /*
