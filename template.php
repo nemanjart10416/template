@@ -29,7 +29,7 @@ include_once("assets/php/functions.php");
 
         <title>Hello, world!</title>
 
-        <link rel="stylesheet" href="assets/css/style.min.css">
+        <link rel="stylesheet" href="assets/css/style.css">
     </head>
     <body>
         <div class="container-fluid">
@@ -41,6 +41,20 @@ include_once("assets/php/functions.php");
             <div class="row">
                 <div class="col-12">
                     <?php echo $answer; ?>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="container section-container">
+                        <div class="row">
+                            <div class="col-12">
+                                <h2 class="into-title">ovo je test</h2>
+                                <h1 class="title">The UK's only brand for bespoke nutrition, delivered daily</h1>
+                                <h2 class="sub-title">ovo je test</h2>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 

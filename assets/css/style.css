@@ -18,6 +18,9 @@
  * texts
  */
 /*
+ * Fonts
+ */
+/*
  * Colors
  */
 /*
@@ -30,20 +33,87 @@
  * texts
  */
 /*
+ * Fonts
+ */
+/*
  * buttons
  */
 /*
  * titles
  */
 .into-title {
-  font-size: 15px;
   font-family: "emoji";
 }
+@media (min-width: 320px) {
+  .into-title {
+    font-size: 21px;
+  }
+}
+@media (min-width: 768px) {
+  .into-title {
+    font-size: 23px;
+  }
+}
+@media (min-width: 1025px) {
+  .into-title {
+    font-size: 25px;
+  }
+}
+@media (min-width: 1441px) {
+  .into-title {
+    font-size: 27px;
+  }
+}
 .title {
-  font-size: 27px;
+  font-family: "emoji";
+}
+@media (min-width: 320px) {
+  .title {
+    font-size: 30px;
+  }
+}
+@media (min-width: 768px) {
+  .title {
+    font-size: 32px;
+  }
+}
+@media (min-width: 1025px) {
+  .title {
+    font-size: 34px;
+  }
+}
+@media (min-width: 1441px) {
+  .title {
+    font-size: 38px;
+  }
 }
 .sub-title {
+  font-family: 18px;
+}
+@media (min-width: 320px) {
+  .sub-title {
+    font-size: 21px;
+  }
+}
+@media (min-width: 768px) {
+  .sub-title {
+    font-size: 23px;
+  }
+}
+@media (min-width: 1025px) {
+  .sub-title {
+    font-size: 25px;
+  }
+}
+@media (min-width: 1441px) {
+  .sub-title {
+    font-size: 27px;
+  }
+}
+p {
   font-size: 18px;
+  font-family: "emoji";
+  margin-bottom: 0;
 }
 /*
  * Scroll bar
@@ -159,6 +229,10 @@
   .side-contact {
     display: none;
   }
+}
+.section-container {
+  padding-left: 0;
+  padding-right: 0;
 }
 p {
   margin-bottom: 0 !important;

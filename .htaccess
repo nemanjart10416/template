@@ -101,6 +101,21 @@ Header always set Referrer-Policy "same-origin"
 #permissions policy
 Header set Permissions-Policy "fullscreen=(self), geolocation=(self), camera=()"
 
+##cookie settings
+# HttpOnly - cookie cannot be accessed through client side script, even if a XSS flaw exists, the browser will not reveal the cookie to a third party
+# Secure - A secure cookie can only be transmitted over an encrypted connection (HTTPS)
+# SameSite - Controls whether or not a cookie is sent with cross-site requests
+# SameSite=Strict - cookies are only sent when the user is navigating within the same site that originally set the cookie
+#                 - if a user follows a link or request from another domain, the cookies will not be sent along with that request
+# SameSite=Lax - Cookies are not sent for typical cross-site requests, such as loading resources like images, iframes, or APIs from different domains
+#              - cookies will be sent when a user navigates to the site (for example, by clicking a link that leads to the site)
+# SameSite=None - cookies are sent with both same-site and cross-site requests
+#               - when browser requests resources (like images, iframes, or APIs) from other websites, or when users navigate to the site from another domain
+#               - for security reasons, cookies with SameSite=None must also have the Secure attribute set,
+<IfModule mod_headers.c>
+    Header always edit Set-Cookie (.*) "$1; HttpOnly; Secure; SameSite=Strict"
+</IfModule>
+
 ## X-Content-Type-Options
 #  security feature that helps prevent browsers from interpreting files in ways that might be unintended
 <IfModule mod_headers.c>
