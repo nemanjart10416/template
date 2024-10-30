@@ -3,6 +3,12 @@
 * */
 var bootstrapCarousel = function (customID) {
     this.carousel = document.getElementById(customID);
+
+    if(!this.carousel) {
+        this.init = () => {}
+        return
+    }
+
     this.slides = this.carousel.querySelectorAll('.carousel-item');
     this.indicators = this.carousel.querySelectorAll('.carousel-indicators button');
     this.currentSlide = 0;
