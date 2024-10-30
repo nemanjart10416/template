@@ -12,19 +12,17 @@ class UserInput {
         // Remove whitespace from the beginning and end of the string
         $data = trim($data);
 
+        // Remove NULL bytes
+        $data = preg_replace('/\x00/', '', $data);
+
         // Strip HTML and PHP tags from the string
         $data = strip_tags($data);
 
         // Convert special characters to HTML entities to prevent XSS attacks
-        $data = htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
+        return htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
+    }
 
-        // Remove NULL bytes and other special characters
-        $data = str_replace(chr(0), '', $data);
-        $data = str_replace("%00", "", $data);
-        $data = str_replace("%0", "", $data);
-
-
-
-        return str_replace("\0", "", $data);
+    public static function sanitizeJs(string $str): string {
+        return json_encode($str, JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP);
     }
 }

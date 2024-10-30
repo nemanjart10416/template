@@ -87,8 +87,28 @@ ErrorDocument 403 /template/assets/php/error/403.php
 </IfModule>
 
 ## Content Security Policy (CSP)
+# browser security mechanism that aims to mitigate XSS and some other attacks
+# works by restricting the resources (such as scripts and images) that a page can load and restricting whether a page can be framed by other pages
+## Mitigating XSS
+#   script-src 'self' https://scripts.normal-website.com
+# If there is any way for an attacker to control content that is served from the external domain, then they might be able to deliver an attack
+# many CSPs do allow image requests. This means you can often use img elements to make requests to external servers in order to disclose CSRF tokens
+## Mitigating dangling markup attacks
+#   img-src 'self' https://images.normal-website.com
+# these policies will prevent some dangling markup exploits, because an easy way to capture data with no user interaction is using an img tag
+# However, it will not prevent other exploits, such as those that inject an anchor tag with a dangling href attribute
+#
+# default-src 'self' - This covers any resources not specified under other directives, ensuring only same-origin requests are allowed by default.
+# base-uri 'self' - Prevents attackers from changing the base URL for the page, which can mitigate certain types of URL-based attacks
+# frame-ancestors 'none' - Blocks the page from being embedded in iframes, protecting against clickjacking
+# media-src - Controls the origins of media files (audio, video) allowed on the site
+# form-action 'self' - Restricts where forms can submit data, preventing form data exfiltration to untrusted origins
+#
+#
+#
+#
 <IfModule mod_headers.c>
-    Header set Content-Security-Policy "default-src 'self';script-src 'self';img-src 'self';frame-ancestors 'none';"
+    Header set Content-Security-Policy "default-src 'self'; script-src 'self'; img-src 'self' data:; style-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; media-src 'self'; form-action 'self';"
 </IfModule>
 
 ## Referrer-Policy
@@ -101,7 +121,7 @@ Header always set Referrer-Policy "same-origin"
 #permissions policy
 Header set Permissions-Policy "fullscreen=(self), geolocation=(self), camera=()"
 
-##cookie settings
+## cookie settings
 # HttpOnly - cookie cannot be accessed through client side script, even if a XSS flaw exists, the browser will not reveal the cookie to a third party
 # Secure - A secure cookie can only be transmitted over an encrypted connection (HTTPS)
 # SameSite - Controls whether or not a cookie is sent with cross-site requests
