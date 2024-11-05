@@ -21,6 +21,11 @@ abstract class Model
     private ?string $createdAt;
 
     /**
+     * @var string|null
+     */
+    private ?string $updatedAt;
+
+    /**
      * Retrieves the name of the database table associated with the implementing class.
      *
      * @return string The name of the database table.
@@ -46,16 +51,20 @@ abstract class Model
      *
      * @param int|null $id
      * @param string|null $uuid
+     * @param string|null $createdAt
+     * @param string|null $updatedAt
      * @throws \Random\RandomException
      */
-    public function __construct(?int $id = null, ?string $uuid = null, ?string $createdAt = null)
+    public function __construct(?int $id = null, ?string $uuid = null, ?string $createdAt = null, ?string $updatedAt = null)
     {
+        $this->id = $id;
+        $this->createdAt = $createdAt;
+        $this->updatedAt = $updatedAt;
+
         if ($id === null && $uuid === null) {
             $this->uuid = $this->generateUuid();
         } else {
-            $this->id = $id;
             $this->uuid = $uuid;
-            $this->createdAt = $createdAt;
         }
     }
 
@@ -282,5 +291,22 @@ abstract class Model
     public function setCreatedAt(?string $createdAt): void
     {
         $this->createdAt = $createdAt;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getUpdatedAt(): ?string
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param string|null $updatedAt
+     * @return void
+     */
+    public function setUpdatedAt(?string $updatedAt): void
+    {
+        $this->updatedAt = $updatedAt;
     }
 }

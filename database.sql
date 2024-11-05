@@ -14,8 +14,8 @@ CREATE TABLE users_u
     u_username    VARCHAR(255) NOT NULL UNIQUE,
     u_password    VARCHAR(255) NOT NULL,
     u_last_login  datetime              DEFAULT NULL,
-    u_modified_at datetime     NOT NULL DEFAULT current_timestamp(),
-    u_created_at  datetime     NOT NULL DEFAULT current_timestamp()
+    u_modified_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    u_created_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE rate_limits_rl
