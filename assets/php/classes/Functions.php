@@ -55,6 +55,53 @@ class Functions {
     }
 
     /**
+     * Uploads an image to the specified directory with validation.
+     *
+     * @param array $image The image file from $_FILES.
+     * @return array An array with 'success' (boolean) and 'message' or 'filePath'.
+     */
+    public static function uploadImage(array $image): array
+    {
+        $targetDir = "../assets/img/";
+
+        // Ensure the directory exists
+        if (!is_dir($targetDir)) {
+            mkdir($targetDir, 0755, true);
+        }
+
+        // Get file details
+        $fileName = basename($image["name"]);
+        $fileName = preg_replace("/[^a-zA-Z0-9\.\-_]/", "", $fileName); // Sanitize file name
+        $returnFileName = uniqid('', true) . '_' . $fileName;
+        $targetFilePath = $targetDir . $returnFileName;
+        $fileType = strtolower(pathinfo($targetFilePath, PATHINFO_EXTENSION));
+
+        // Allowed file types
+        $allowedTypes = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+        if (!in_array($fileType, $allowedTypes)) {
+            return ['success' => false, 'message' => "Only JPG, JPEG, PNG, GIF, and WEBP files are allowed."];
+        }
+
+        // Check if file is a valid image
+        $check = getimagesize($image["tmp_name"]);
+        if ($check === false) {
+            return ['success' => false, 'message' => "File is not a valid image."];
+        }
+
+        // Limit file size (example: max 2MB)
+        if ($image["size"] > 2 * 1024 * 1024) {
+            return ['success' => false, 'message' => "File size exceeds the 2MB limit."];
+        }
+
+        // Attempt to move the uploaded file
+        if (move_uploaded_file($image["tmp_name"], $targetFilePath)) {
+            return ['success' => true, 'filePath' => htmlspecialchars($returnFileName)];
+        } else {
+            return ['success' => false, 'message' => "Error: There was an issue uploading your file."];
+        }
+    }
+
+    /**
      * Encrypts the given text using AES-256-CBC encryption.
      *
      * @param string $text The text to be encrypted.
@@ -98,7 +145,7 @@ class Functions {
      */
     public static function issetValues(array $datalist, array $method): bool {
         foreach ($datalist as $data) {
-            if (!isset($method[$data])) {
+            if (!isset($method[$data]) || empty($data)) {
                 return false;
             }
         }

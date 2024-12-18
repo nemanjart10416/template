@@ -52,7 +52,7 @@ class Validator {
         $ruleValue = isset($parts[1]) ? $parts[1] : null;
 
         if ($ruleName === 'required') { //OK
-            if (empty($this->data[$field])) {
+            if (empty($this->data[$field]) || !isset($this->data[$field])) {
                 $this->addError($field, 'Field is required.');
             }
         } elseif ($ruleName === 'min') { //OK

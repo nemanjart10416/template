@@ -32,7 +32,7 @@ class Connection
         $this->db_servername = "localhost";
         $this->db_username = "root";
         $this->db_password = "";
-        $this->db_database = "jobs";
+        $this->db_database = "smash_burger_db";
 
         if (false) { //server database
             $this->db_servername = "localhost";
@@ -291,7 +291,7 @@ class Connection
      * @param array $params An associative array of parameter values for prepared statement.
      * @return bool|null True on success, false on failure, or null on error.
      */
-    public static function setP(string $sql, array $params = []): ?bool
+    public static function setP(string $sql, array $params = []): bool|int|null
     {
         $conn = Connection::connection();
         $stmt = $conn->prepare($sql);
@@ -312,11 +312,19 @@ class Connection
                 echo "Statement execution error: " . $stmt->error;
             }
 
+            var_dump($conn->insert_id);
+
+            if($conn->insert_id){
+                $ans = $conn->insert_id;
+            }else{
+                $ans = $success;
+            }
+
             // Close the statement and connection
             $stmt->close();
             $conn->close();
 
-            return $success;
+            return $ans;
         } else {
             // Print the error before returning null
             if ($conn->error) {

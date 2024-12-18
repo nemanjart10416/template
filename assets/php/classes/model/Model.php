@@ -8,17 +8,22 @@ abstract class Model
     /**
      * @var int|null
      */
-    private ?int $id;
+    protected ?int $id;
 
     /**
      * @var string
      */
-    private string $uuid;
+    protected string $uuid;
 
     /**
      * @var string|null
      */
-    private ?string $createdAt;
+    protected ?string $createdAt;
+
+    /**
+     * @var string|null
+     */
+    protected ?string $updatedAt;
 
     /**
      * Retrieves the name of the database table associated with the implementing class.
@@ -46,16 +51,20 @@ abstract class Model
      *
      * @param int|null $id
      * @param string|null $uuid
+     * @param string|null $createdAt
+     * @param string|null $updatedAt
      * @throws \Random\RandomException
      */
-    public function __construct(?int $id = null, ?string $uuid = null, ?string $createdAt = null)
+    public function __construct(?int $id = null, ?string $uuid = null, ?string $createdAt = null, ?string $updatedAt = null)
     {
+        $this->id = $id;
+        $this->createdAt = $createdAt;
+        $this->updatedAt = $updatedAt;
+
         if ($id === null && $uuid === null) {
             $this->uuid = $this->generateUuid();
         } else {
-            $this->id = $id;
             $this->uuid = $uuid;
-            $this->createdAt = $createdAt;
         }
     }
 
@@ -188,9 +197,9 @@ abstract class Model
      * properties. The 'id' and 'createdAt' properties are skipped, as they are managed by the
      * database. If the insert operation is successful, it returns true; otherwise, it returns false.
      *
-     * @return bool True if the record was successfully inserted, false otherwise.
+     * @return bool|int True if the record was successfully inserted, false otherwise.
      */
-    public function insert(): bool
+    public function insert(): bool|int
     {
         // Prepare properties and parameters for the INSERT statement
         $properties = [];
@@ -203,17 +212,27 @@ abstract class Model
             // Check if the property is public
             $property->setAccessible(true); // Allow access to private properties
             $value = $property->getValue($this);
-            if ($property->getName() !== 'id' && $property->getName() !== 'createdAt') { // Skip id and createdAt
+
+            if ($property->getName() !== 'id' && $property->getName() !== 'createdAt' && $property->getName() !== 'updatedAt') { // Skip id and createdAt
                 $columns[] = static::getTablePrefix() . "_" . $property->getName();
                 $properties[] = "?"; // Placeholder for the value
-                $params[] = $value; // Add the value to params
+
+                // Check if the value is an enum; if so, get its value
+                if (is_object($value) && enum_exists($value::class)) {
+                    $params[] = $value->value; // Use the value of the enum
+                } else {
+                    $params[] = $value; // Add the value directly if it's not an enum
+                }
             }
         }
 
         // Prepare the SQL query
         $sql = "INSERT INTO " . static::getTableName() . " (" . implode(', ', $columns) . ") VALUES (" . implode(', ', $properties) . ")";
 
-        return Connection::setP($sql, $params); // Execute the query
+        $ans = Connection::setP($sql, $params);
+        var_dump($ans);
+
+        return $ans; // Execute the query
     }
 
     /**
@@ -282,5 +301,22 @@ abstract class Model
     public function setCreatedAt(?string $createdAt): void
     {
         $this->createdAt = $createdAt;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getUpdatedAt(): ?string
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param string|null $updatedAt
+     * @return void
+     */
+    public function setUpdatedAt(?string $updatedAt): void
+    {
+        $this->updatedAt = $updatedAt;
     }
 }
